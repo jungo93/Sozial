@@ -1,0 +1,658 @@
+													<!------------------------ HEAD -------------------------->
+<head>
+
+	<meta charset="UTF-8"/>
+
+	<title>SocialMusFest</title>
+
+	<meta name="description" content="Onepage Multipurpose Bootstrap HTML Template">
+	<meta name="author" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/font-awesome.css">
+	<link rel="stylesheet" href="css/animate.css">
+	<link rel="stylesheet" href="css/theme.css">
+
+	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Playball' rel='stylesheet' type='text/css'>
+	<link rel="icon" type="image/png" href="/img/logo.png" />
+
+</head>
+
+
+
+
+													<!------------------------ BODY -------------------------->
+<body>
+</body>
+
+
+
+
+													<!------------------------ HEADER AND FOOTER -------------------------->
+<template name="ApplicationLayout">
+  {{> yield "navbar"}}
+  {{> yield "main"}}
+</template>
+
+<!-- templates for display header information -->
+<template name="header">
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<!--meteor add accounts-google-->
+			<!--meteor add accounts-facebook-->
+			{{> loginButtons}}
+		</div>
+	</nav>
+	
+	<!--header-->
+	<header>
+		<div class="banner row" id="banner">		
+			<div class="parallax text-center" style="background-image: url(/img/fondo.jpg);">
+				<div class="parallax-pattern-overlay">
+					<div class="container text-center" style="height:350px;padding-top:170px;">
+						<a href="/">					
+							<p>
+								<img id="SocialMusFest" src="img/logo.png" alt="logo" height="200" width="200" align="left">
+								<img id="SocialMusFest" src="img/logo.png" alt="logo" height="200" width="200" align="right">
+								<h2 class="intro wow zoomIn" wow-data-delay="0.4s" wow-data-duration="0.9s">SocialMusFest</h2>
+							</p>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+</template>
+
+
+
+
+													<!------------------------ PRINCIPAL PAGE -------------------------->
+<!-- principal page -->
+<template name="principal">
+    <div class="wrapper" id="wrapper">
+		{{> header}}
+		
+		<div class="heading text-center">
+			<img class="dividerline" src="img/sep.png" alt="">
+			{{#if currentUser}}
+				<h2>BIENVENIDO, {{username}}!</h2>
+			{{else}}
+				<h2>SocialMusFest te permite conocer los festivales que se organizan alrededor del mundo. Conoce los detalles de los mismos, compra entradas y apúntate!</h2>
+			{{/if}}
+			<img class="dividerline" src="img/sep.png" alt="">
+		</div>
+
+		{{#if currentUser}}
+			<div style="text-align: center">
+				<a href="/perfil" class="btn btn-info btn-lg" align="center">Modificar Perfil</a>
+			</div>
+			<p></p>
+
+			<div style="text-align: center">
+				<a href="/creator" class="btn btn-info btn-lg" align="center">Crear Festival</a>
+			</div>
+			
+			<p></p>
+
+			<!--Tabla de contactos-->
+			<table border="2" style="width:70%" align="center">
+				<div style="text-align: center"><h1>CONTACTOS: </h1></div>
+
+				<!--find following-->
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a>
+					<strong>Siguiendo ({{contSiguiendo}}): </strong>
+					<a id="findFollowing" class="btn btn-default js-find-following">
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+					</a>
+					<a id="notFindFollowing" class="btn btn-default js-notFind-following" style="display:none;">
+						<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+					</a>
+					
+				</a>
+				
+				<!--find followers-->
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a>
+					<strong>Seguidores ({{contSeguidores}}): </strong>
+					<a id="findFollowers" class="btn btn-default js-find-followers">
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+					</a>
+					<a id="notFindFollowers" class="btn btn-default js-notFind-followers" style="display:none;">
+						<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+					</a>
+				</a>
+							
+				<!--find people-->
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a>
+					<strong>Encuentra Gente ({{contGente}}): </strong>
+					<a id="findPeople" class="btn btn-default js-find-people">
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+					</a>
+					<a id="notFindPeople" class="btn btn-default js-notFind-people" style="display:none;">
+						<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+					</a>
+				</a>
+
+				<p></p>
+				
+				<!--Tablas de los usuarios-->
+				<table id="find_following" border="2" style="width:70%; display:none;" align="center">
+					<tr bgcolor="D8D8D8">
+						<td>
+							¡Siguiendo!<p></p>
+							{{> following_list}}
+						</td>
+					</tr>
+				</table>
+
+				<p></p>
+
+				<table id="find_followers" border="2" style="width:70%; display:none;" align="center">
+					<tr bgcolor="D8D8D8">
+						<td>
+							¡Seguidores!<p></p>
+							{{> followers_list}}
+						</td>
+					</tr>
+				</table>
+				
+				<p></p>
+				
+				<table id="find_people" border="2" style="width:70%; display:none;" align="center">
+					<tr bgcolor="D8D8D8">
+						<td>
+							¡Encuentra gente!<p></p>
+							{{> people_list}}
+						</td>
+					</tr>
+				</table>
+
+				<p></p>
+			
+			</table>
+		{{/if}}
+
+		<!--list of festivals-->
+		{{#if currentUser}}
+			<div class="heading text-center">
+				<img class="dividerline" src="img/sep2.png" alt="">
+				<h3>FESTIVALES CREADOS ({{contCreados}})</h3>
+			</div>
+			<div id="grid-gallery" class="grid-gallery">
+				{{> creatorfestival_list}}
+			</div>
+			
+			<div class="heading text-center">
+				<img class="dividerline" src="img/sep2.png" alt="">
+				<h3>MIS FESTIVALES ({{contAsistidos}})</h3>
+			</div>
+			<div id="grid-gallery" class="grid-gallery">
+				{{> myfestival_list}}
+			</div>
+			
+			<div class="heading text-center">
+				<img class="dividerline" src="img/sep2.png" alt="">
+				<h3>BUSCAR FESTIVALES ({{contTotal}})</h3>
+			</div>
+		{{/if}}
+			<div id="grid-gallery" class="grid-gallery">
+				{{> festival_list}}
+			</div>
+	
+	</div>
+</template>
+
+
+
+
+
+<!-- template that displays several peope items -->
+<template name="people_list">
+	{{#each user}}
+		<li>
+			<a href="/perfil/{{username}}">{{username}}</a>
+		</li>
+	{{/each}}
+</template>
+
+<!-- template that displays only the users that follows the current user -->
+<template name="followers_list">
+	{{#each user}}
+		<li>
+			<a href="/perfil/{{username}}">{{username}}</a>
+		</li>
+	{{/each}}
+</template>
+
+<!-- template that displays only the users that the current user is following -->
+<template name="following_list">
+	{{#each user}}
+		<li>
+			<a href="/perfil/{{username}}">{{username}}</a>
+		</li>
+	{{/each}}
+</template>
+
+
+
+
+<!-- template that displays several festival items -->
+<template name="festival_list">
+	{{#each festivals}}
+		{{>festival_item}}
+	{{/each}}
+</template>
+
+<!-- template that displays only the users festival items -->
+<template name="creatorfestival_list">
+	{{#each festivals}}
+		{{>festival_item}}
+	{{/each}}
+</template>
+
+<!-- template that displays only the users festival items -->
+<template name="myfestival_list">
+	{{#each festivals}}
+		{{>festival_item}}
+	{{/each}}
+</template>
+
+<!-- template that display some information of a festival -->
+<template name="festival_item">
+	<ul class="grid">
+		<li class="grid-sizer"></li><!-- for Masonry column width -->				
+		<li>
+			<figure>
+				<a href="/{{_id}}">
+					
+					<img class="js-image" src="{{getPhoto photo}}" alt="{{name}}" width="100" height="400"/>
+					<figcaption>
+						<h3>{{name}}</h3>
+						<strong>FECHA: </strong><p>{{getDate firstDay}} - {{getDate lastDay}}</p>
+						<strong>LUGAR: </strong><p>{{place}}</p>
+					</figcaption>
+				</a>
+			</figure>
+		</li>
+	</ul>
+</template>
+
+
+
+
+													<!------------------------ FESTIVAL PAGE -------------------------->
+<template name="festival">
+    
+    <div class="wrapper" id="wrapper">
+		
+		{{> header}}
+		
+		<div class="heading text-center">
+			<img class="dividerline" src="img/sep.png" alt="">
+			<h2>{{name}}</h2>
+			<h4>{{description}}</h4>
+			<img class="dividerline" src="img/sep.png" alt="">
+		</div>
+		
+		<img src="{{getPhoto photo}}" alt="" width="500" height="600" align="left" hspace="50"/>
+		<strong>LUGAR: </strong> <h4>{{place}}</h4>
+		<br />
+		<strong>FECHAS: </strong> <h4>{{getDate firstDay}} - {{getDate lastDay}}</h4>
+		<br />
+		<strong>ENTRADAS: </strong> <h4>{{sales}}</h4>
+		<br />
+		<strong>CONTACTO: </strong> <h4>{{contact_number}}</h4>
+		<br />
+		<strong>ENLACE DEL SITIO: </strong> <h4>{{webpage}}</h4>
+		<br />
+		<strong>CREADO POR: </strong> <h4>{{creator}}</h4>
+		<br />
+
+		<br />
+		
+		<table border="2" style="width:25%;" align="center">
+			<tr bgcolor="D8D8D8">
+				<td>
+				
+					<div style="text-align: center">
+						<strong>CAPACIDAD: </strong>
+						<h4>{{capacity}}</h4>
+					</div>
+				
+					<div style="text-align: center">
+						<strong>ASISTENTES: </strong> 
+						<h4>{{assistants}}</h4>
+					</div>
+
+					{{#if currentUser}}
+					<div style="text-align: center">
+						<a href="#" id="asist" class="btn btn-success btn-lg js-asist">
+							<span class="glyphicon glyphicon-arrow-up"></span>
+						</a>
+						<a href="#" id="notasist" class="btn btn-danger btn-lg js-notasist">
+							<span class="glyphicon glyphicon-arrow-down"></span>
+						</a>
+						<!-- message for maximun capacity -->
+						<div id="maxCapacity" style="color:red; display:none">Aforo máximo. No se permite acudir a más personas, lo sentimos.</div>
+					</div>
+					{{/if}}
+			
+				</td>
+			</tr>
+		</table>
+		
+		<!-- button for delete the festival -->
+		<div style="text-align: right">
+			{{#if deleteFest}}
+				<a href="/" id="deleteFestival" class="btn btn-danger js-delete-festival" style='width:100px; height:50px'>Eliminar</a>
+			{{/if}}
+
+			
+			<a href="/" class="btn btn-info btn-lg" style='width:100px; height:50px'>Salir</a>
+			<p></p>
+		</div>
+	</div>
+
+</template>
+
+
+
+
+													<!------------------------ USER CHANGE PAGE -------------------------->
+<template name="perfil">
+	
+	{{#if currentUser}}
+	
+	<div class="wrapper" id="wrapper">
+
+		{{> header}}
+
+		<!-- datos esenciales -->
+		<div class="heading text-center">
+			<img class="dividerline" src="img/sep.png" alt="">
+			<h2>Datos Esenciales</h2>
+			<h4>(Los datos que no se rellenen se mantendrán como estaban)</h4>
+			<img class="dividerline" src="img/sep.png" alt="">
+		</div>
+		<table border="2" style="width:70%" align="center"> 
+			<tr bgcolor="D8D8D8"> 
+				<td>
+
+					<p></p>
+					<strong>Usuario: </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="nombreusuario" size="30">
+					<p></p>
+					<strong>Email:  </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="email" id="email" size="30">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<strong>Repita Email: </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="email" id="emailRepetido" size="30">
+					<p><div id="notSameEmail" style="color:red; display:none;" align="center">¡Los correos electrónicos no coinciden!.</div></p>
+					<strong>Contraseña: </strong>&nbsp;<input type="password" id="password" size="30">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<strong>Repita Contraseña: </strong><input type="password" id="passwordRepetido" size="30">
+					<p><div id="notSamePassword" style="color:red; display:none;" align="center">¡Las contraseñas no coinciden!.</div></p>
+					
+				</td>
+			</tr> 
+		</table>
+		
+		<!-- datos adicionales -->
+		<div class="heading text-center">
+			<img class="dividerline" src="img/sep.png" alt="">
+			<h2>Datos Adicionales</h2>
+			<h4>(Los datos que no se rellenen se mantendrán como estaban)</h4>
+			<img class="dividerline" src="img/sep.png" alt="">
+		</div>
+		<table border="2" style="width:70%" align="center"> 
+			<tr bgcolor="D8D8D8"> 
+				<td> 
+
+					<p></p>
+					<strong>Nombre: </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="nombre" size="30">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<strong>Apellido: </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="apellido" size="30">
+					<p></p>
+					<strong>Fecha de Nacimiento: </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="date" id="dia">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<strong>Género:  </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="radio" id="sexo" value="Hombre"> Hombre
+						<input type="radio" id="sexo" value="Mujer"> Mujer
+						<input type="radio" id="sexo" value="Otro"> Otro
+					<p></p>
+					<strong>Residencia: </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="residencia" size="30">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<strong>Estilo de Música: </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<select id="estilo">
+							<option value=""> </option>
+							<option value="Rock">Rock</option>
+							<option value="Jazz">Jazz</option>
+							<option value="Rap">Rap</option>
+							<option value="Pop">Pop</option>
+							<option value="Clásico">Clásico</option>
+							<option value="Alternativo">Alternativo</option>
+							<option value="Dance">Dance</option>
+							<option value="Otro">Otro</option>
+						</select>
+					<p></p>
+					<strong>Foto de Perfil: <input type="url" id="foto" size="30" placeholder="URL donde se encuentra la foto..."></strong>
+					<p></p>
+
+				</td>
+			</tr> 
+		</table>
+		
+		<p></p>
+		
+		<div style="text-align: right">
+			<a href="/" class="btn btn-success btn-lg js-save" style='width:100px; height:50px'>Guardar</a>
+			<a href="/" class="btn btn-default btn-lg" style='width:100px; height:50px'>Cancelar</a>
+		</div>
+		<p></p>
+	</div>
+	
+	{{else}}
+		
+	<div class="container">
+		<div class="jumbotron">
+			<h1>Recurso no accesible, lo sentimos...</h1>
+			<a href="/" class="btn btn-info">Volver</a>
+		</div>
+	</div>
+		
+	{{/if}}
+	
+</template>
+
+
+													<!------------------------ FESTIVAL CREATION PAGE -------------------------->
+<template name="creator">
+	
+	{{#if currentUser}}
+	
+	<div class="wrapper" id="wrapper">
+
+		{{> header}}
+		
+		<div class="heading text-center">
+			<img class="dividerline" src="img/sep.png" alt="">
+			<h2>Nuevo Festival</h2>
+			<img class="dividerline" src="img/sep.png" alt="">
+		</div>
+		
+		<!-- message for existing festivals -->
+		<div id="repeatName" style="color:red; display:none;" align="center">Ya existe un festival con ese nombre. Cambia el nombre para poder registrarlo.</div>
+
+		<!-- message for not introduced data -->
+		<div id="notData" style="color:red; display:none;" align="center">¡Introduce los datos en las casillas marcadas!</div>
+
+		<table border="2" style="width:70%" align="center">
+			<tr bgcolor="D8D8D8">
+				<td>
+					<p></p>
+					(Los elementos con asterisco son obligatorios introducir)
+					<p></p>
+					<strong>NOMBRE DEL FESTIVAL*: </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="nombreFestival" size="30">
+					<p></p>
+					<strong>DESCRIPCIÓN*: </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="descripcion" size="70">
+					<p></p>
+					<strong>CAPACIDAD*: </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="number" id="capacidad" min="1">
+					<p></p>
+					<strong>FECHA DE INICIO*: </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="date" id="diaInicio">
+					<p></p><div id="wrongDates" style="color:red; display:none;">¡Las fechas no son correctas!</div>
+					<strong>FECHA DE FIN*: </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="date" id="diaFin">
+					<p></p>
+					<strong>LUGAR*: </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="lugar" size="30">
+					<p></p>
+					<strong>CONTACTO: </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="phone" id="contactofestival" size="30">
+					<p></p>
+					<strong>COMPRA DE ENTRADAS: </strong>&nbsp;&nbsp;&nbsp;&nbsp;<input type="email" id="entradasfestival" size="30">
+					<p></p>
+					<strong>URL: </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="email" id="urlfestival" size="30">
+					<p></p>
+					<strong>FOTO: </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="url" id="fotofestival" size="30" placeholder="URL donde se encuentra la foto...">
+					<p></p>
+				</td>
+			</tr>
+		</table>
+		
+		<!-- Generar Calendario -->
+		<br />
+		<!-- message for not introduced data -->
+		<div id="notDates" style="color:red; display:none;" align="center">Antes de acceder a esta opción, introduce unas fechas.</div>
+		
+		<strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Generar Calendario </strong>
+		<a id="create" class="btn btn-default js-create-calendar">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+		</a>
+		<a id="notcreate" class="btn btn-default js-notcreate-calendar" style="display:none">
+			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+		</a>
+		
+		<table id="calendar_create" border="2" style="width:70%; display:none" align="center">
+			<tr bgcolor="D8D8D8">
+				<td>
+					Por favor, en primer lugar introduzca el número de grupos, horarios y escenarios que compondrán el festival:<p></p>
+					<strong>Nº GRUPOS (1-99): </strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="number" id="numberGroups" min="1" max="99">
+					<p></p>
+					<strong>Nº HORARIOS (1-9): </strong> &nbsp;&nbsp;&nbsp; <input type="number" id="numberHorarios" min="1" max="9">
+					<p></p>
+					<strong>Nº ESCENARIOS (1-9): </strong> <input type="number" id="numberEscenarios" min="1" max="9">
+					<p></p>
+					<a class="btn btn-default js-number-calendar">Aceptar</a>
+					
+				</td>
+			</tr>
+		</table>
+		
+		<table id="calendar_create_2" border="2" style="width:70%; display:none" align="center">
+			<tr bgcolor="D8D8D8">
+				<td>
+					
+					<p></p>
+					<div id="notDataGenerator" style="color:red; display:none;" align="center">¡Introduce los datos que te faltan!</div>
+					<strong>GRUPOS: </strong> (Valore cada grupo desde el mas importante (9) al menos (0), pudiendo repetir valores)
+					<div id="grupos"></div>
+					<strong>HORARIOS: </strong> (Valore cada horario desde el mas importante (9) al menos (0), pudiendo repetir valores. La propuesta se mostrará en función del orden en el que introduzca los horarios.)
+					<div id="horarios"></div>
+					<strong>ESCENARIOS: </strong> (Valore cada escenario desde el mas importante (9) al menos (0), pudiendo repetir valores)
+					<div id="escenarios"></div>
+					<a class="btn btn-default js-new-calendar">Generar</a>
+					<a class="btn btn-default js-new-number-calendar">Volver</a>
+					<p></p>
+					
+				</td>
+			</tr>
+		</table>
+		
+		<br />
+		<div id="advise" style="display:none;" align="center">(Para eliminar la propuesta selecciona el botón del generador)</div>
+		<div id="propuesta"></div>
+		
+		<div style="text-align: right">
+			<a href="/" class="btn btn-success btn-lg js-new-festival" style='width:100px; height:50px'>Guardar</a>
+			<a href="/" class="btn btn-default btn-lg" style='width:100px; height:50px'>Cancelar</a>
+		</div>
+		<p></p>
+
+	</div>
+	
+	{{else}}
+		
+	<div class="container">
+		<div class="jumbotron">
+			<h1>Recurso no accesible, lo sentimos...</h1>
+			<a href="/" class="btn btn-info">Volver</a>
+		</div>
+	</div>
+		
+	{{/if}}
+
+</template>
+
+
+
+
+													<!------------------------ USER INFORMATION PAGE -------------------------->
+<template name="infoPerfil">
+	{{#if currentUser}}
+	
+	<div class="wrapper" id="wrapper">
+		
+		{{> header}}
+		
+		<div class="heading text-center">
+			<img class="dividerline" src="img/sep.png" alt="">
+			<h2 id="surname">{{username}}</h2>
+			<img class="dividerline" src="img/sep.png" alt="">
+		</div>
+		
+		<img src="{{getImage image}}" alt="" width="500" height="600" align="left" hspace="50"/>
+		<strong>NOMBRE: </strong> <h4>{{name}}</h4>
+		<br />
+		<strong>APELLIDO: </strong> <h4>{{surname}}</h4>
+		<br />
+		<strong>EMAIL: </strong> <h4>{{getEmail username}}</h4>
+		<br />
+		<strong>FECHA DE NACIMIENTO: </strong> <h4>{{birthday}}</h4>
+		<br />
+		<strong>RESIDENCIA: </strong> <h4>{{place}}</h4>
+		<br />
+		<strong>ESTILO DE MÚSICA: </strong> <h4>{{music_style}}</h4>
+		<br />
+		<strong>GÉNERO: </strong> <h4>{{gender}}</h4>
+		<br />
+		
+
+		<br />
+			
+		<a href="#" id="follow" class="btn btn-success btn-lg js-follow">Seguir</a>
+		<a href="#" id="notfollow" class="btn btn-danger btn-lg js-notfollow">Dejar de Seguir</a>
+		
+		<div style="text-align: right">
+			<a href="/" class="btn btn-info btn-lg" style='width:100px; height:50px'>Salir</a>
+		</div>
+		<p></p>
+		
+	</div>
+	
+	{{else}}
+		
+	<div class="container">
+		<div class="jumbotron">
+			<h1>Recurso no accesible, lo sentimos...</h1>
+			<a href="/" class="btn btn-info">Volver</a>
+		</div>
+	</div>
+		
+	{{/if}}
+
+</template>
